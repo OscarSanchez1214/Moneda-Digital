@@ -3,16 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MiniApp - Moneda Digital</title>
+  <title>MiniApp - Buscar Usuario</title>
 </head>
 <body>
   <h1>Bienvenido a mi MiniApp</h1>
-  <p id="user-info">Cargando usuario...</p>
+  <p id="current-user">Cargando usuario actual...</p>
 
-  <!-- SDK oficial de World App -->
+  <hr>
+
+  <h2>Buscar otro usuario:</h2>
+  <input type="text" id="search" placeholder="wallet o username" />
+  <button onclick="buscarUsuario()">Buscar</button>
+  <p id="resultado-busqueda"></p>
+
+  <!-- SDK -->
   <script src="https://unpkg.com/@worldcoin/minikit"></script>
-
-  <!-- Tu lógica en JS -->
+  <!-- Tu lógica -->
   <script src="script.js"></script>
 </body>
 </html>
+
