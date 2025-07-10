@@ -1,19 +1,26 @@
-// Cargar el SDK MiniKit de World
+// Inicializar MiniKit
 const mini = new window.MiniKit();
 
-// Esperar a que World App active el entorno
+// Elemento del DOM donde se mostrará el usuario
+const userInfoEl = document.getElementById("user-info");
+
+// Esperar a que el entorno esté listo (solo ocurre dentro de World App)
 mini.ready().then(() => {
-  // Obtener información del usuario actual
   const user = mini.getUser();
 
-  // Mostrar el nombre o dirección del usuario en pantalla
-  const el = document.getElementById("user-info");
-  if (user) {
-    el.innerText = `Hola, ${user.displayName || user.walletAddress || "usuario"} 👋`;
+  // Comprobamos si existe user y walletAddress
+  if (user && user.walletAddress) {
+    const username = user.username || "usuario anónimo";
+    const wallet = user.walletAddress;
+    const os = user.deviceOS || "desconocido";
+    const version = user.worldAppVersion || "n/a";
+
+    userInfoEl.innerText = `Hola, ${username} 👋\nWallet: ${wallet}\nOS: ${os}\nVersión: ${version}`;
   } else {
-    el.innerText = "No se pudo obtener el usuario";
+    userInfoEl.innerText = "No se pudo obtener la información del usuario.";
   }
+
 }).catch((error) => {
   console.error("Error al iniciar MiniKit:", error);
-  document.getElementById("user-info").innerText = "Error al cargar la mini‑app.";
+  userInfoEl.innerText = "Esta MiniApp solo funciona dentro de World App.";
 });
