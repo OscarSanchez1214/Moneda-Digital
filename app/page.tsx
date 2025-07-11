@@ -6,8 +6,8 @@ export default function Home() {
   const [status, setStatus] = useState('Esperando verificación...');
 
   const verifyPayload = {
-    action: 'voting-action', // REEMPLAZAR por tu Action ID
-    signal: '0x12312', // Opcional
+    action: 'voting-action', // Reemplaza con tu Action ID real
+    signal: '0x12312',
     verification_level: VerificationLevel.Orb,
   };
 
@@ -19,7 +19,6 @@ export default function Home() {
 
     try {
       const { finalPayload } = await MiniKit.commandsAsync.verify(verifyPayload);
-
       if (finalPayload.status === 'error') {
         setStatus('Verificación cancelada o fallida.');
         return;
@@ -36,11 +35,7 @@ export default function Home() {
       });
 
       const result = await response.json();
-      if (result.status === 200) {
-        setStatus('✅ Verificación exitosa');
-      } else {
-        setStatus('❌ Verificación fallida');
-      }
+      setStatus(result.status === 200 ? '✅ Verificación exitosa' : '❌ Verificación fallida');
 
     } catch (err) {
       console.error(err);
@@ -50,7 +45,7 @@ export default function Home() {
 
   return (
     <main>
-      <h1>MiniApp World ID</h1>
+      <h1>MiniApp Moneda Digital</h1>
       <p>{status}</p>
       <button onClick={handleVerify}>Verificar con World ID</button>
     </main>
