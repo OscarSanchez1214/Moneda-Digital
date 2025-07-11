@@ -1,26 +1,38 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MiniKit, VerificationLevel, ISuccessResult } from '@worldcoin/minikit-js';
 
 export default function Home() {
   const [status, setStatus] = useState('Esperando verificación...');
+  const [kitStatus, setKitStatus] = useState('Verificando si MiniKit está disponible...');
+
+  useEffect(() => {
+    const checkKit = () => {
+      const installed = MiniKit.isInstalled();
+      setKitStatus(installed ? '✅ MiniKit está instalado' : '❌ MiniKit NO está instalado');
+    };
+
+    checkKit();
+  }, []);
 
   const verifyPayload = {
-    action: 'voting-action', // Reemplaza con tu Action ID real
+    action: 'voting-action', // Asegúrate de que este ID esté registrado correctamente
     signal: '0x12312',
     verification_level: VerificationLevel.Orb,
   };
 
   const handleVerify = async () => {
+    console.log('Botón presionado');
+
     if (!MiniKit.isInstalled()) {
-      setStatus('Abre esta MiniApp desde World App para verificar.');
+      setStatus('❌ MiniKit NO está instalado. Abre esta MiniApp desde World App.');
       return;
     }
 
     try {
       const { finalPayload } = await MiniKit.commandsAsync.verify(verifyPayload);
       if (finalPayload.status === 'error') {
-        setStatus('Verificación cancelada o fallida.');
+        setStatus('❌ Verificación cancelada o fallida.');
         return;
       }
 
@@ -39,14 +51,15 @@ export default function Home() {
 
     } catch (err) {
       console.error(err);
-      setStatus('Ocurrió un error en la verificación.');
+      setStatus('❌ Error en la verificación.');
     }
   };
 
   return (
-    <main>
+    <main style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
       <h1>MiniApp Moneda Digital</h1>
-      <p>{status}</p>
+      <p><strong>Estado de MiniKit:</strong> {kitStatus}</p>
+      <p><strong>Estado de verificación:</strong> {status}</p>
       <button onClick={handleVerify}>Verificar con World ID</button>
     </main>
   );
